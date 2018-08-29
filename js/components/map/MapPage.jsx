@@ -12,7 +12,8 @@ class Map extends React.Component {
         latitude: 37.7577,
         longitude: -122.4376,
         zoom: 8
-      }
+      },
+      places: []
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }

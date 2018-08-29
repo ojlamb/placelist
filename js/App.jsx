@@ -1,11 +1,14 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import { shape, string } from "prop-types";
 import Header from "./components/common/Header";
 import Home from "./components/home/HomePage";
 import About from "./components/about/AboutPage";
 import Map from "./components/map/MapPage";
 import Places from "./components/places/PlacesPage";
-// import Place from "./components/places/PlacePage";
+import store from "./store/configureStore";
+import PlaceDetail from "./components/places/PlaceDetail";
 
 const FourOhFour = () => (
   <div>
@@ -13,19 +16,29 @@ const FourOhFour = () => (
     <h1>404</h1>
   </div>
 );
-
 const App = () => (
-  <BrowserRouter>
-    <div className="app">
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/places" component={Places} />
-        <Route path="/map" component={Map} />
-        <Route path="/about" component={About} />
-        <Route component={FourOhFour} />
-      </Switch>
-    </div>
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <div className="app">
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/places" component={Places} />
+          <Route path="/map" component={Map} />
+          <Route path="/about" component={About} />
+          <Route path="/place/:id" component={PlaceDetail} />
+          <Route component={FourOhFour} />
+        </Switch>
+      </div>
+    </BrowserRouter>
+  </Provider>
 );
+
+App.propTypes = {
+  match: shape({
+    params: shape.isRequired,
+    path: string.isRequired,
+    url: string.isRequired
+  })
+};
 
 export default App;

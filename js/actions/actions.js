@@ -1,0 +1,4 @@
+/* eslint-disable */
+export const LOAD_PLACES_SUCCESS = "LOAD_PLACES_SUCCESS";
+export const CREATE_PLACE_SUCCESS = "CREATE_PLACE_SUCCESS";
+export const GET_PLACE_SUCCESS = "GET_PLACE_SUCCESS";

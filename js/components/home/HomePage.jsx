@@ -13,12 +13,12 @@ class HomePage extends React.Component {
     return (
       <div className="HomePage">
         <Header />
-        <div className="Hero">
+        <div className="hero">
           <h1>Welcome to PlaceList</h1>
           <p>List, map, share and rank your spots</p>
           <Link style={{ textDecoration: "none" }} to="/places">
             <Button variant="contained" color="primary">
-              Add to the List
+              Explore to the List
             </Button>
           </Link>
         </div>

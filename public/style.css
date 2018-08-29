@@ -422,3 +422,8 @@ td,
 th {
   padding: 0;
 }
+
+.hero {
+  text-align: center;
+  margin: 5em;
+}
