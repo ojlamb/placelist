@@ -13,7 +13,7 @@ export function loadPlacesSuccess(places) {
 export function loadPlaces() {
   return dispatch => {
     axios
-      .get(`http://localhost:5000/places.json`)
+      .get(`http://localhost:5000/places`)
       .then(response => {
         dispatch(loadPlacesSuccess(response.data));
       })
@@ -30,7 +30,7 @@ export function getPlaceSuccess(place) {
 export function getPlaceById(id) {
   return dispatch => {
     axios
-      .get(`http://localhost:5000/api/v1/places/` + id)
+      .get(`http://localhost:5000/places/` + id)
       .then(response => {
         dispatch(getPlaceSuccess(response.data));
       })
@@ -47,7 +47,7 @@ export function createPlaceSuccess(place) {
 export function createPlace(place) {
   return dispatch => {
     axios
-      .post(`http://localhost:5000/api/v1/places`, { place })
+      .post(`http://localhost:5000/places`, { place })
       .then(response => {
         dispatch(createPlaceSuccess(response.data));
       })

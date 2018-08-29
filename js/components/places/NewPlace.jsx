@@ -1,7 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-// import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -11,6 +9,9 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import MUIPlacesAutocomplete, {
+  geocodeByPlaceID
+} from "mui-places-autocomplete";
 
 class NewPlace extends React.Component {
   constructor(props) {
@@ -20,7 +21,9 @@ class NewPlace extends React.Component {
         name: "",
         address: "",
         category: "",
-        description: ""
+        description: "",
+        lat: 0,
+        lon: 0
       },
       saving: false
     };
@@ -29,6 +32,7 @@ class NewPlace extends React.Component {
     this.onCategoryChange = this.onCategoryChange.bind(this);
     this.onDescriptionChange = this.onDescriptionChange.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
+    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
   }
 
   onNameChange = event => {
@@ -55,7 +59,24 @@ class NewPlace extends React.Component {
     this.setState({ place });
   };
 
+  onSuggestionSelected = suggestion => {
+    const place = this.state.place;
+    place.name = suggestion.structured_formatting.main_text;
+    geocodeByPlaceID(suggestion.place_id)
+      .then(results => {
+        const { geometry } = results[0];
+        place.lat = geometry.location.lat();
+        place.lon = geometry.location.lng();
+        place.address = results[0].formatted_address;
+        this.setState({ place });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   onClickSave = () => {
+    console.log(this.state.place);
     this.props.createPlace(this.state.place);
   };
 
@@ -67,12 +88,31 @@ class NewPlace extends React.Component {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Add Place</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
+        <DialogContent
+          style={{
+            paddingLeft: "25px",
+            paddingRight: "25px"
+          }}
+        >
+          <DialogContentText style={{ marginBottom: "10px" }}>
             Please fill out the place form to add your spot to the list!
           </DialogContentText>
+          <MUIPlacesAutocomplete
+            style={{
+              marginTop: 25
+            }}
+            onSuggestionSelected={this.onSuggestionSelected}
+            renderTarget={() => (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center"
+                }}
+              />
+            )}
+          />
           <TextField
-            autoFocus
             margin="dense"
             id="name"
             label="Name"
@@ -103,7 +143,7 @@ class NewPlace extends React.Component {
               Category
             </MenuItem>
             <MenuItem value={"drinks"}>Drinks</MenuItem>
-            <MenuItem value={"food"}>Dinner</MenuItem>
+            <MenuItem value={"dinner"}>Dinner</MenuItem>
             <MenuItem value={"burgers"}>Burgers</MenuItem>
             <MenuItem value={"tacos"}>Tacos</MenuItem>
             <MenuItem value={"sushi"}>Sushi</MenuItem>

@@ -17,6 +17,7 @@ const placeReducer = (state = [], action) => {
   }
 
   if (action.type === CREATE_PLACE_SUCCESS) {
+    console.log("create place success, rerender");
     return [...state, Object.assign({}, action.payload)];
   }
 
