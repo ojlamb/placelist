@@ -9,9 +9,18 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import { Validation, fieldValidatorCore } from "react-validation-framework";
+import validator from "validator";
 import MUIPlacesAutocomplete, {
   geocodeByPlaceID
 } from "mui-places-autocomplete";
+
+fieldValidatorCore.addSupport(
+  "TextField",
+  event => event[0].target.value,
+  (callback, args) => callback(args[0], undefined, args[0].target.value),
+  "error"
+);
 
 class NewPlace extends React.Component {
   constructor(props) {
@@ -25,7 +34,8 @@ class NewPlace extends React.Component {
         lat: 0,
         lon: 0
       },
-      saving: false
+      saving: false,
+      alertOpen: false
     };
     this.onNameChange = this.onNameChange.bind(this);
     this.onAddressChange = this.onAddressChange.bind(this);
@@ -33,6 +43,8 @@ class NewPlace extends React.Component {
     this.onDescriptionChange = this.onDescriptionChange.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+    this.hasAddress = true;
+    this.hasName = true;
   }
 
   onNameChange = event => {
@@ -71,107 +83,183 @@ class NewPlace extends React.Component {
         this.setState({ place });
       })
       .catch(err => {
-        console.log(err);
+        console.log(err); // eslint-disable-line no-console
       });
   };
 
   onClickSave = () => {
-    console.log(this.state.place);
-    this.props.createPlace(this.state.place);
+    const checkFieldTestResult = fieldValidatorCore.checkGroup("myGroup1");
+    if (checkFieldTestResult.isValid) {
+      this.props.createPlace(this.state.place);
+    } else {
+      this.setState({ alertOpen: true });
+    }
+  };
+
+  closeForm = () => {
+    this.setState({
+      place: {
+        name: "",
+        address: "",
+        category: "",
+        description: "",
+        lat: 0,
+        lon: 0
+      }
+    });
+    this.props.handleClose();
+  };
+
+  closeAlert = () => {
+    this.setState({ alertOpen: false });
   };
 
   render() {
+    if (this.state.place.address !== "") {
+      this.hasAddress = true;
+    } else {
+      this.hasAddress = false;
+    }
+    if (this.state.place.name !== "") {
+      this.hasName = true;
+    } else {
+      this.hasName = false;
+    }
+
     return (
-      <Dialog
-        open={this.props.formOpen}
-        onClose={this.props.handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Add Place</DialogTitle>
-        <DialogContent
-          style={{
-            paddingLeft: "25px",
-            paddingRight: "25px"
-          }}
+      <div>
+        <Dialog
+          open={this.props.formOpen}
+          onClose={this.closeForm}
+          aria-labelledby="form-dialog-title"
         >
-          <DialogContentText style={{ marginBottom: "10px" }}>
-            Please fill out the place form to add your spot to the list!
-          </DialogContentText>
-          <MUIPlacesAutocomplete
+          <DialogTitle id="form-dialog-title">Add Place</DialogTitle>
+          <DialogContent
             style={{
-              marginTop: 25
+              paddingLeft: "25px",
+              paddingRight: "25px"
             }}
-            onSuggestionSelected={this.onSuggestionSelected}
-            renderTarget={() => (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center"
-                }}
-              />
-            )}
-          />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Name"
-            type="name"
-            fullWidth
-            onChange={this.onNameChange}
-            value={this.state.place.name}
-          />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Address"
-            type="address"
-            fullWidth
-            onChange={this.onAddressChange}
-            value={this.state.place.address}
-          />
-          <Select
-            style={{ marginTop: "13px" }}
-            onChange={this.onCategoryChange}
-            value={this.state.place.category}
-            fullWidth
-            label="Category"
-            name="category"
-            displayEmpty
           >
-            <MenuItem value="" disabled>
-              Category
-            </MenuItem>
-            <MenuItem value={"drinks"}>Drinks</MenuItem>
-            <MenuItem value={"dinner"}>Dinner</MenuItem>
-            <MenuItem value={"burgers"}>Burgers</MenuItem>
-            <MenuItem value={"tacos"}>Tacos</MenuItem>
-            <MenuItem value={"sushi"}>Sushi</MenuItem>
-            <MenuItem value={"brewery"}>Brewery</MenuItem>
-            <MenuItem value={"club"}>Club</MenuItem>
-            <MenuItem value={"coffee"}>Coffee</MenuItem>
-            <MenuItem value={"lunch"}>Lunch</MenuItem>
-            <MenuItem value={"brunch"}>Brunch</MenuItem>
-          </Select>
-          <TextField
-            margin="dense"
-            id="name"
-            label="Description"
-            type="description"
-            fullWidth
-            onChange={this.onDescriptionChange}
-            value={this.state.place.description}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.props.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={this.onClickSave} color="primary">
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <DialogContentText style={{ marginBottom: "10px" }}>
+              Please fill out the place form to add your spot to the list!
+            </DialogContentText>
+            <MUIPlacesAutocomplete
+              style={{
+                marginTop: 25
+              }}
+              onSuggestionSelected={this.onSuggestionSelected}
+              renderTarget={() => (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center"
+                  }}
+                />
+              )}
+            />
+            <Validation
+              group="myGroup1"
+              validators={[
+                {
+                  validator: val => !validator.isEmpty(val)
+                }
+              ]}
+            >
+              <TextField
+                margin="dense"
+                id="name"
+                label="Name"
+                type="name"
+                fullWidth
+                error={!this.hasName}
+                helperText={this.hasName ? "" : "Name cannot be blank"}
+                onChange={this.onNameChange}
+                value={this.state.place.name}
+              />
+            </Validation>
+            <Validation
+              group="myGroup1"
+              validators={[
+                {
+                  validator: val => !validator.isEmpty(val)
+                }
+              ]}
+            >
+              <TextField
+                margin="dense"
+                id="name"
+                label="Address"
+                type="address"
+                fullWidth
+                error={!this.hasAddress}
+                helperText={this.hasAddress ? "" : "Address cannot be blank"}
+                onChange={this.onAddressChange}
+                value={this.state.place.address}
+              />
+            </Validation>
+            <Select
+              style={{ marginTop: "13px" }}
+              onChange={this.onCategoryChange}
+              value={this.state.place.category}
+              fullWidth
+              id="name"
+              label="Category"
+              name="category"
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                Category
+              </MenuItem>
+              <MenuItem value={"drinks"}>Drinks</MenuItem>
+              <MenuItem value={"dinner"}>Dinner</MenuItem>
+              <MenuItem value={"burgers"}>Burgers</MenuItem>
+              <MenuItem value={"tacos"}>Tacos</MenuItem>
+              <MenuItem value={"sushi"}>Sushi</MenuItem>
+              <MenuItem value={"brewery"}>Brewery</MenuItem>
+              <MenuItem value={"club"}>Club</MenuItem>
+              <MenuItem value={"coffee"}>Coffee</MenuItem>
+              <MenuItem value={"lunch"}>Lunch</MenuItem>
+              <MenuItem value={"brunch"}>Brunch</MenuItem>
+            </Select>
+            <TextField
+              margin="dense"
+              id="name"
+              label="Description"
+              type="description"
+              fullWidth
+              onChange={this.onDescriptionChange}
+              value={this.state.place.description}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeForm} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.onClickSave} color="primary">
+              Submit
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.alertOpen}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Form Errors"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Please fill out all required fields
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeAlert} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     );
   }
 }

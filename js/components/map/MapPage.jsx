@@ -50,7 +50,7 @@ class Map extends React.Component {
       viewport: {
         ...this.state.viewport,
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight - 64
       }
     });
   }
@@ -79,7 +79,7 @@ class Map extends React.Component {
           latitude={popupInfo.lat}
           onClose={() => this.setState({ popupInfo: null })}
         >
-          <PlaceInfo info={popupInfo} />
+          <PlaceInfo place={popupInfo} />
         </Popup>
       )
     );
