@@ -49,7 +49,7 @@ class PlaceCard extends React.Component {
           <Typography component="p">{this.props.upvotes}</Typography>
         </CardContent>
         <CardActions>
-          <Link className={classes.link} to={`/place/${this.props.id + 1}`}>
+          <Link className={classes.link} to={`/place/${this.props.id}`}>
             <Button size="small" color="primary">
               More
             </Button>

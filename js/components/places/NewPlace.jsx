@@ -31,6 +31,7 @@ class NewPlace extends React.Component {
         address: "",
         category: "",
         description: "",
+        long_name: "",
         lat: 0,
         lon: 0
       },
@@ -73,6 +74,7 @@ class NewPlace extends React.Component {
 
   onSuggestionSelected = suggestion => {
     const place = this.state.place;
+    place.long_name = suggestion.description;
     place.name = suggestion.structured_formatting.main_text;
     geocodeByPlaceID(suggestion.place_id)
       .then(results => {
@@ -90,6 +92,10 @@ class NewPlace extends React.Component {
   onClickSave = () => {
     const checkFieldTestResult = fieldValidatorCore.checkGroup("myGroup1");
     if (checkFieldTestResult.isValid) {
+      if (this.state.place.category === "") {
+        this.state.place.category = "other";
+      }
+      this.closeForm();
       this.props.createPlace(this.state.place);
     } else {
       this.setState({ alertOpen: true });
@@ -221,6 +227,7 @@ class NewPlace extends React.Component {
               <MenuItem value={"coffee"}>Coffee</MenuItem>
               <MenuItem value={"lunch"}>Lunch</MenuItem>
               <MenuItem value={"brunch"}>Brunch</MenuItem>
+              <MenuItem value={"other"}>Other</MenuItem>
             </Select>
             <TextField
               margin="dense"

@@ -1,11 +1,17 @@
 import React from "react";
+import compose from "recompose/compose";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
+import classNames from "classnames";
+import { withStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import Button from "@material-ui/core/Button";
 import MapGL, { Marker, Popup, NavigationControl } from "react-map-gl";
 import Header from "../common/Header";
 import MapPin from "./MapPin";
 import PlaceInfo from "./PlaceInfo";
+import NewPlace from "../places/NewPlace";
 import * as placeActions from "../../actions/placeActions";
 
 const navStyle = {
@@ -14,6 +20,21 @@ const navStyle = {
   left: 0,
   padding: "10px"
 };
+
+const styles = theme => ({
+  actionButton: {
+    margin: 0,
+    top: "auto",
+    right: 20,
+    bottom: 20,
+    left: "auto",
+    position: "fixed",
+    zIndex: 2000
+  },
+  icon: {
+    marginRight: theme.spacing.unit * 2
+  }
+});
 
 class Map extends React.Component {
   constructor(props) {
@@ -30,7 +51,10 @@ class Map extends React.Component {
         zoom: 10
       },
       popupInfo: null,
-      places: []
+      places: [],
+      formOpen: false,
+      handleClose: this.handleClose,
+      createPlace: this.createPlace
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
@@ -57,6 +81,19 @@ class Map extends React.Component {
 
   updateViewport = viewport => {
     this.setState({ viewport });
+  };
+
+  handleClickOpen = () => {
+    this.setState({ formOpen: true });
+  };
+
+  handleClose = () => {
+    this.setState({ formOpen: false });
+  };
+
+  createPlace = place => {
+    this.props.actions.createPlace(place);
+    this.handleClose();
   };
 
   renderPlaceMarker(place, index) {
@@ -86,10 +123,21 @@ class Map extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     const { viewport } = this.state;
     return (
       <div>
         <Header />
+        <Button
+          variant="fab"
+          color="primary"
+          aria-label="Add"
+          className={classNames(classes.button, classes.actionButton)}
+          onClick={this.handleClickOpen}
+        >
+          <AddIcon />
+        </Button>
+        <NewPlace {...this.state} />
         <div>
           <MapGL
             mapStyle="mapbox://styles/owenlamb/cjlfragh72pll2rpb8n4j2j0e"
@@ -114,9 +162,11 @@ class Map extends React.Component {
 }
 
 Map.propTypes = {
+  classes: PropTypes.shape({}).isRequired,
   places: PropTypes.instanceOf(Array).isRequired,
   actions: PropTypes.shape({
-    loadPlaces: PropTypes.func.isRequired
+    loadPlaces: PropTypes.func.isRequired,
+    createPlace: PropTypes.func.isRequired
   }).isRequired
 };
 
@@ -128,7 +178,10 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(placeActions, dispatch)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+export default compose(
+  withStyles(styles),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )(Map);

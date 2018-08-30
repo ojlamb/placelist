@@ -87,9 +87,9 @@ class PlacePage extends React.Component {
         <div style={{ maxHeight: "100vh", overflow: "auto" }}>
           <div className={classNames(classes.layout, classes.cardGrid)}>
             <Grid container spacing={40}>
-              {this.props.places.map((place, index) => (
+              {this.props.places.map(place => (
                 <Grid item key={Math.random()} sm={6} md={4} lg={3}>
-                  <PlaceCard {...place} key={place.id} id={index} />
+                  <PlaceCard {...place} key={place.id} />
                 </Grid>
               ))}
             </Grid>
