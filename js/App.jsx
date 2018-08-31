@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import { shape, string } from "prop-types";
 import Login from "./components/auth/LoginPage";
+import Signup from "./components/auth/SignupPage";
 import Header from "./components/common/Header";
 import Home from "./components/home/HomePage";
 import About from "./components/about/AboutPage";
@@ -23,7 +24,8 @@ const App = () => (
       <div className="app">
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
           <Route path="/places" component={Places} />
           <Route path="/map" component={Map} />
           <Route path="/about" component={About} />

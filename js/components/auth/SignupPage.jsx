@@ -14,7 +14,7 @@ import LockIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import * as sessionActions from "../../actions/sessionActions";
+import * as sessionActions from "../../actions/userActions";
 
 const styles = theme => ({
   layout: {
@@ -52,23 +52,25 @@ const styles = theme => ({
   }
 });
 
-class LoginPage extends React.Component {
+class SignupPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { credentials: { email: "", password: "" } };
+    this.state = {
+      user: { name: "", email: "", password: "", password_confirmation: "" }
+    };
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
   }
 
   onChange(event) {
     const field = event.target.name;
-    const credentials = this.state.credentials;
-    credentials[field] = event.target.value;
-    return this.setState({ credentials });
+    const user = this.state.user;
+    user[field] = event.target.value;
+    return this.setState({ user });
   }
   onSave(event) {
     event.preventDefault();
-    this.props.actions.loginUser(this.state.credentials);
+    this.props.actions.createUser(this.state.user);
   }
 
   render() {
@@ -81,16 +83,25 @@ class LoginPage extends React.Component {
             <Avatar className={classes.avatar}>
               <LockIcon />
             </Avatar>
-            <Typography variant="headline">Sign in to PlaceList</Typography>
+            <Typography variant="headline">Join PlaceList</Typography>
             <form className={classes.form}>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="name">Name</InputLabel>
+                <Input
+                  id="name"
+                  name="name"
+                  autoFocus
+                  value={this.state.user.name}
+                  onChange={this.onChange}
+                />
+              </FormControl>
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="email">Email Address</InputLabel>
                 <Input
                   id="email"
                   name="email"
                   autoComplete="email"
-                  autoFocus
-                  value={this.state.credentials.email}
+                  value={this.state.user.email}
                   onChange={this.onChange}
                 />
               </FormControl>
@@ -100,8 +111,20 @@ class LoginPage extends React.Component {
                   name="password"
                   type="password"
                   id="password"
-                  value={this.state.credentials.password}
+                  value={this.state.user.password}
                   autoComplete="current-password"
+                  onChange={this.onChange}
+                />
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="password">
+                  Password Confirmation
+                </InputLabel>
+                <Input
+                  name="password_confirmation"
+                  type="password"
+                  id="password_confirmation"
+                  value={this.state.user.password_confirmation}
                   onChange={this.onChange}
                 />
               </FormControl>
@@ -113,14 +136,14 @@ class LoginPage extends React.Component {
                 className={classes.submit}
                 onClick={this.onSave}
               >
-                Sign in
+                Sign up
               </Button>
             </form>
             <p>
-              New User?
-              <Link className={classes.link} to="/signup">
+              Already have an account?{" "}
+              <Link className={classes.link} to="/login">
                 <Button size="small" color="primary">
-                  Sign Up
+                  Sign In
                 </Button>
               </Link>
             </p>
@@ -135,10 +158,10 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(sessionActions, dispatch)
 });
 
-LoginPage.propTypes = {
+SignupPage.propTypes = {
   classes: PropTypes.shape({}).isRequired,
   actions: PropTypes.shape({
-    loginUser: PropTypes.func.isRequired
+    createUser: PropTypes.func.isRequired
   }).isRequired
 };
 
@@ -148,4 +171,4 @@ export default compose(
     null,
     mapDispatchToProps
   )
-)(LoginPage);
+)(SignupPage);

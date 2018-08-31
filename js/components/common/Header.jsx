@@ -112,15 +112,29 @@ class Header extends React.Component {
               </div>
             ) : (
               <div>
-                <Link className={classes.link} to="/login">
-                  <Button
-                    className={classes.button}
-                    color="primary"
-                    variant="outlined"
-                  >
-                    Login
-                  </Button>
-                </Link>
+                <div>
+                  <Link className={classes.link} to="/login">
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      variant="outlined"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                </div>
+                <span>or</span>
+                <div>
+                  <Link className={classes.link} to="/signup">
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      variant="outlined"
+                    >
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
               </div>
             )}
           </Toolbar>
