@@ -29,7 +29,8 @@ const styles = theme => ({
   flexGrow: 1,
   media: {
     height: 200,
-    margin: 10
+    margin: 5,
+    marginBottom: 20
   }
 });
 
