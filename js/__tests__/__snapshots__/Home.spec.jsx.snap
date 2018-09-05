@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home renders correctly 1`] = `
+<div
+  className="HomePage"
+>
+  <div
+    className="hero"
+  >
+    <h1>
+      Welcome to PlaceList
+    </h1>
+    <p>
+      List, map, share and rank your spots
+    </p>
+    <Link
+      replace={false}
+      style={
+        Object {
+          "textDecoration": "none",
+        }
+      }
+      to="/places"
+    >
+      <WithStyles(Button)
+        color="primary"
+        variant="contained"
+      >
+        Explore to the List
+      </WithStyles(Button)>
+    </Link>
+  </div>
+</div>
+`;

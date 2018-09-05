@@ -1,5 +1,4 @@
 import React from "react";
-import Header from "../common/Header";
 
 class AboutPage extends React.Component {
   constructor(props) {
@@ -10,7 +9,6 @@ class AboutPage extends React.Component {
   render() {
     return (
       <div className="AboutPage">
-        <Header />
         <h1>About</h1>
         <p>Explain what the app does</p>
       </div>

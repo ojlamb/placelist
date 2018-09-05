@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search renders correctly 1`] = `
+<div
+  className="AboutPage"
+>
+  <h1>
+    About
+  </h1>
+  <p>
+    Explain what the app does
+  </p>
+</div>
+`;

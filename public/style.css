@@ -425,15 +425,14 @@ th {
 
 .hero {
   text-align: center;
-  margin: 5em;
   padding: 20px;
-background-color: rgba(250,250,250,.5);
+  background-color: rgba(250,250,250,.5);
 }
 
 .HomePage {
   height: 100vh;
   width: 100%;
   background-size: cover;
-background-position: center;
+  background-position: center;
   background-image: url(/public/images/5.jpg);
 }

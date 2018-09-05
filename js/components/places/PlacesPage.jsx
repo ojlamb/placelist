@@ -8,7 +8,6 @@ import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-import Header from "../common/Header";
 import PlaceCard from "./PlaceCard";
 import NewPlace from "./NewPlace";
 import * as placeActions from "../../actions/placeActions";
@@ -73,7 +72,6 @@ class PlacePage extends React.Component {
     const { classes } = this.props;
     return (
       <div>
-        <Header />
         <Button
           variant="fab"
           color="primary"

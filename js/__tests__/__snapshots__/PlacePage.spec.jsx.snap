@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Places renders correctly 1`] = `
+<Connect(PlacePage)
+  classes={
+    Object {
+      "actionButton": "Connect-PlacePage--actionButton-1",
+      "cardGrid": "Connect-PlacePage--cardGrid-4",
+      "icon": "Connect-PlacePage--icon-2",
+      "layout": "Connect-PlacePage--layout-3",
+    }
+  }
+/>
+`;

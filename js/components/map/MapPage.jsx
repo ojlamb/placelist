@@ -8,7 +8,6 @@ import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import Button from "@material-ui/core/Button";
 import MapGL, { Marker, Popup, NavigationControl } from "react-map-gl";
-import Header from "../common/Header";
 import MapPin from "./MapPin";
 import PlaceInfo from "./PlaceInfo";
 import NewPlace from "../places/NewPlace";
@@ -127,7 +126,6 @@ class Map extends React.Component {
     const { viewport } = this.state;
     return (
       <div>
-        <Header />
         <Button
           variant="fab"
           color="primary"
