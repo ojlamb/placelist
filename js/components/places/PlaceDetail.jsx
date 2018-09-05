@@ -5,6 +5,8 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -15,11 +17,19 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import EditPlace from "./EditPlace";
 import * as placeActions from "../../actions/placeActions";
 
+const MapBoxKey =
+  "pk.eyJ1Ijoib3dlbmxhbWIiLCJhIjoiY2lleWljcnF4MDBiOXQ0bHR0anRvamtucSJ9.t3YnHHqvQZ8Y0MTCNy0NNw";
+
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2
+  },
+  flexGrow: 1,
+  media: {
+    height: 200,
+    margin: 10
   }
 });
 
@@ -78,6 +88,25 @@ class PlaceDetail extends React.Component {
         />
         <div style={{ margin: "10px" }}>
           <Paper className={classes.root} elevation={1}>
+            <Grid container spacing={24}>
+              <Grid item md={6} xs={12}>
+                <CardMedia
+                  className={classes.media}
+                  image={`https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/pin-s+3f51b5(${
+                    this.props.place.lon
+                  },${this.props.place.lat})/${this.props.place.lon},${
+                    this.props.place.lat
+                  }},15.0,0,0/570x270@2x?access_token=${MapBoxKey}`}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <CardMedia
+                  className={classes.media}
+                  image={`/public/images/${this.props.place.category}.jpg`}
+                />
+              </Grid>
+            </Grid>
+
             <Typography variant="headline" component="h3">
               {this.props.place.name}
             </Typography>
@@ -151,10 +180,10 @@ PlaceDetail.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     address: PropTypes.string,
-    category: PropTypes.string
+    category: PropTypes.string,
     // upvotes: PropTypes.number.isRequired,
-    // lat: PropTypes.number.isRequired,
-    // lon: PropTypes.number.isRequired
+    lat: PropTypes.number.isRequired,
+    lon: PropTypes.number.isRequired
   }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape.isRequired,

@@ -1,19 +1,19 @@
 import React from "react";
-import { shape } from "prop-types";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
+import compose from "recompose/compose";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-// import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-// import Switch from "@material-ui/core/Switch";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import * as sessionActions from "../../actions/sessionActions";
 
 const styles = {
   root: {
@@ -36,14 +36,19 @@ const styles = {
 };
 
 class Header extends React.Component {
-  state = {
-    auth: true,
-    anchorEl: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchorEl: null
+    };
+    this.logOut = this.logOut.bind(this);
+  }
 
-  handleChange = (event, checked) => {
-    this.setState({ auth: checked });
-  };
+  logOut(event) {
+    event.preventDefault();
+    this.props.actions.logOutUser();
+    this.setState({ anchorEl: null });
+  }
 
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -55,8 +60,7 @@ class Header extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { auth, anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    const open = Boolean(this.state.anchorEl);
 
     return (
       <div className={classes.root}>
@@ -71,7 +75,7 @@ class Header extends React.Component {
                 PlaceList
               </Link>
             </Typography>
-            {auth ? (
+            {this.props.session ? (
               <div>
                 <Link className={classes.link} to="/map">
                   <Button className={classes.button}>Map</Button>
@@ -94,7 +98,7 @@ class Header extends React.Component {
                 </IconButton>
                 <Menu
                   id="menu-appbar"
-                  anchorEl={anchorEl}
+                  anchorEl={this.state.anchorEl}
                   anchorOrigin={{
                     vertical: "top",
                     horizontal: "right"
@@ -108,6 +112,7 @@ class Header extends React.Component {
                 >
                   <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                   <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  <MenuItem onClick={this.logOut}>Log Out</MenuItem>
                 </Menu>
               </div>
             ) : (
@@ -115,24 +120,15 @@ class Header extends React.Component {
                 <div>
                   <Link className={classes.link} to="/login">
                     <Button
-                      className={classes.button}
-                      color="primary"
                       variant="outlined"
+                      color="primary"
+                      className={classes.button}
                     >
                       Login
                     </Button>
                   </Link>
-                </div>
-                <span>or</span>
-                <div>
                   <Link className={classes.link} to="/signup">
-                    <Button
-                      className={classes.button}
-                      color="primary"
-                      variant="outlined"
-                    >
-                      Sign Up
-                    </Button>
+                    <Button className={classes.button}>Sign Up</Button>
                   </Link>
                 </div>
               </div>
@@ -144,8 +140,26 @@ class Header extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  session: state.session
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(sessionActions, dispatch)
+});
+
 Header.propTypes = {
-  classes: shape({}).isRequired
+  classes: PropTypes.shape({}).isRequired,
+  actions: PropTypes.shape({
+    logOutUser: PropTypes.func.isRequired
+  }).isRequired,
+  session: PropTypes.bool.isRequired
 };
 
-export default withStyles(styles)(Header);
+export default compose(
+  withStyles(styles),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(Header);

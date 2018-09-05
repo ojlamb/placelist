@@ -39,7 +39,7 @@ class PlaceCard extends React.Component {
         <CardMedia
           className={classes.media}
           image={`/public/images/${this.props.category}.jpg`}
-          title="Work and Class"
+          title={this.props.name}
         />
         <CardContent>
           <Typography gutterBottom variant="headline" component="h2">

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import axios from "axios";
-import { LOGIN_USER_SUCCESS } from "./actions";
+import { LOGIN_USER_SUCCESS, LOG_OUT } from "./actions";
 
 export function LoginUserSuccess(place) {
   return { type: LOGIN_USER_SUCCESS, payload: place };
@@ -18,4 +18,9 @@ export function loginUser(credentials) {
         console.error("axios error", error); // eslint-disable-line no-console
       });
   };
+}
+
+export function logOutUser() {
+  sessionStorage.removeItem("jwt");
+  return { type: LOG_OUT };
 }

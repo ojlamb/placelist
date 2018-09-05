@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import places from "./placeReducer";
-import sessions from "./sessionReducer";
+import session from "./sessionReducer";
 import users from "./userReducer";
 
-const rootReducer = combineReducers({ places, sessions, users });
+const rootReducer = combineReducers({ places, session, users });
 
 export default rootReducer;
