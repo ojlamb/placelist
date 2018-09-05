@@ -69,6 +69,7 @@ class LoginPage extends React.Component {
   onSave(event) {
     event.preventDefault();
     this.props.actions.loginUser(this.state.credentials);
+    this.props.history.push("/");
   }
 
   render() {
@@ -139,6 +140,9 @@ LoginPage.propTypes = {
   classes: PropTypes.shape({}).isRequired,
   actions: PropTypes.shape({
     loginUser: PropTypes.func.isRequired
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
   }).isRequired
 };
 

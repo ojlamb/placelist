@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search renders correctly 1`] = `
+<Connect(Map)
+  classes={
+    Object {
+      "actionButton": "Connect-Map--actionButton-1",
+      "icon": "Connect-Map--icon-2",
+    }
+  }
+/>
+`;

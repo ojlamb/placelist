@@ -71,6 +71,7 @@ class SignupPage extends React.Component {
   onSave(event) {
     event.preventDefault();
     this.props.actions.createUser(this.state.user);
+    this.props.history.push("/login");
   }
 
   render() {
@@ -162,6 +163,9 @@ SignupPage.propTypes = {
   classes: PropTypes.shape({}).isRequired,
   actions: PropTypes.shape({
     createUser: PropTypes.func.isRequired
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
   }).isRequired
 };
 

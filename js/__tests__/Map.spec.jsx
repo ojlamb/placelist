@@ -1,7 +1,7 @@
 import React from "react";
-import About from "../components/about/AboutPage";
+import Map from "../components/map/MapPage";
 
 test("Search renders correctly", () => {
-  const component = shallow(<About />);
+  const component = shallow(<Map />);
   expect(component).toMatchSnapshot();
 });

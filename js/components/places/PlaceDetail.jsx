@@ -12,7 +12,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Header from "../common/Header";
 import EditPlace from "./EditPlace";
 import * as placeActions from "../../actions/placeActions";
 
@@ -71,7 +70,6 @@ class PlaceDetail extends React.Component {
     const place = this.props.place;
     return (
       <div>
-        <Header />
         <EditPlace
           {...this.props}
           formOpen={this.state.formOpen}

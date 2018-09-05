@@ -423,6 +423,7 @@ th {
   padding: 0;
 }
 
+
 .hero {
   text-align: center;
   padding: 20px;
@@ -432,6 +433,7 @@ th {
 .HomePage {
   height: 100vh;
   width: 100%;
+  margin-top: 5px;
   background-size: cover;
   background-position: center;
   background-image: url(/public/images/5.jpg);
