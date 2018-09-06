@@ -57,7 +57,7 @@ class PlaceDetail extends React.Component {
 
   deletePlace = () => {
     this.props.actions.deletePlace(this.state.id);
-    this.handleDeleteClose();
+    this.props.history.push("/places");
   };
 
   handleClickEdit = () => {
@@ -70,10 +70,6 @@ class PlaceDetail extends React.Component {
 
   handleClickDelete = () => {
     this.setState({ deleteFormOpen: true });
-  };
-
-  handleDeleteClose = () => {
-    this.setState({ deleteFormOpen: false });
   };
 
   render() {
@@ -97,7 +93,7 @@ class PlaceDetail extends React.Component {
                     this.props.place.lon
                   },${this.props.place.lat})/${this.props.place.lon},${
                     this.props.place.lat
-                  }},15.0,0,0/570x270@2x?access_token=${MapBoxKey}`}
+                  }},14.0,0,0/570x270@2x?access_token=${MapBoxKey}`}
                 />
               </Grid>
               <Grid item md={6} xs={12}>
@@ -158,14 +154,9 @@ const filterPlace = (places, id) => {
   return Object.assign({}, thePlace);
 };
 
-const mapStateToProps = (state, ownProps) => {
-  if (state.places.redirect) {
-    ownProps.history.push("/places");
-  }
-  return {
-    place: filterPlace(state.places, ownProps.match.params.id)
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  place: filterPlace(state.places, ownProps.match.params.id)
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(placeActions, dispatch)
@@ -191,7 +182,10 @@ PlaceDetail.propTypes = {
     path: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired
   }).isRequired,
-  classes: PropTypes.shape({}).isRequired
+  classes: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
 };
 
 export default compose(

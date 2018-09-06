@@ -32,7 +32,6 @@ const placeReducer = (state = [], action) => {
       place => place.id === action.payload.id
     );
     newState.splice(indexOfPlaceToDelete, 1);
-    newState.redirect = true;
     return newState;
   }
 
